@@ -1,0 +1,13 @@
+install.packages(" arules")
+library(arules)
+actions<-read.transactions("./_DSBA_UNCC/DBSA_6201_Business_Intelligence_and_Analytics/transactions.csv", sep  =",", rm.duplicates= T, skip=1)
+actions@itemInfo
+frqisets<- apriori(actions, parameter=list(minlen=2, supp   =0.05, conf=0.5, target="frequent itemsets"))
+inspect(sort(frqisets, by="support"))
+rules.all<- apriori(actions)
+rules<-apriori(actions, parameter=list(minlen=2,    supp  =0.02, conf=0.20, target="rules"))
+rulesLift <- subset(rules, subset = lift > 1)
+inspect(rules)
+inspect(rulesLift)
+rules.sorted<-sort(rules, by="lift")
+inspect(rules.sorted)
